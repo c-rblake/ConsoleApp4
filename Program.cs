@@ -547,6 +547,66 @@ namespace SkalProj_Datastrukturer_Minne
                 return (GetNthFibonacci_Rec(n - 1) + GetNthFibonacci_Rec(n - 2));
         }
 
+        // FRÅGA 1. Stack och Heap.
+        // Jag tänker så här: Stack är som sidor i en bok. Varje öppen sida finns i minnet
+        // När datorn är klar går den vidare i sekvensen och laddar nästa sida och dumpar förra
+        // Använda och släng
+
+        // Heap är en hög med variabler som ligger i minnet hela tiden programmet körs.
+        // Heapen slängs inte automatiskt så man får tänka på det. Om något inte behöver ligga med
+        // kanske man kan skriva över en reference type.
+        // typ var += 1 skriveröver som annars skulle ligga i minne på två ställen
+
+        // FRÅGA 2. Value type och reference type
+        // En value type håller själva värdet, så är var = 1; så håller det verkligen 1.
+        // De är ganska vanliga typer av data typ int.
+        // En reference type har istället en pointer till var.
+        // En klass är ofta mer komplicerad och kan se ut hur som helst. Så de skapas.
+        // Så då pekar vi någonstans i minnet med en variabel men håller inte själva klassen/objektet.
+
+        // FRÅGA 3. exempel på Stack
+        // Första metoden
+        // X deklareras som 3, y refererar X, sedan sätts y till 4. X är fortfarande 3
+        // Andra metoden
+        // X är inte en INT den är en MyInt objekt
+        // X pekar på MyInt (3). Y pekar på samma objekt. Y ändrar objektet till 4.
+        // Objektet är 4, både x,y pekar dit
+
+
+
+        //1.1 VARFÖR ökar inte Count och Capacity I samma takt.För det är ganska omständing att öka capacity.Det kopierar över en ny lista.Det är relativt minnessnållt att missa lite capacity än att hela tiden göra denna kopiering till nya arrayer.
+        //1.5 Klipps listans capacitet ned? Nej, det är inte så viktigt.Men TrimExcess() kan ta ned den.
+        //1.6 Egen Array. Om vi I design stadiet vet hur lång array ska vara så kan vi använda array. Typ ett spel 10 x 10.
+
+
+
+        //Övning 3.1: ExamineStack()
+        //Varför Stack inte är så bra på ICA.Det blir väldigt jobbigt att vara först in och sist ut.I verklilgheten skulle det inte fungera som en kö alls då alla skulle ställa sig sist och vi får en infinite loop på ICA.
+
+
+
+        //Rekursion:
+        //Rekursion – VI HAR REDAN LÖST base case Base = 3
+        //RecursiveOdd(1) =>
+        //RecursiveOdd(0) + 2  => return 1 + 2 => 3
+        //RecursiveOdd(3) => RecursiveOdd(3) => 
+        //RecursiveOdd(2) + 2   5+2 = 7
+        //RecursiveOdd(2) = > 
+        //RecursiveOdd(1) + 2   3+2 = 5
+        //RecursiveOdd(1) =>
+        //RecursiveOdd(0) + 2  => return 1 + 2 => 3  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
