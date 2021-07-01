@@ -22,6 +22,9 @@ namespace SkalProj_Datastrukturer_Minne
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParanthesis"
                     + "\n5. Reverse text"
+                    + "\n6. Even recursion"
+                    + "\n7. Fibonacci recursion"
+                    + "\n8. Iteration even"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -49,6 +52,15 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
                     case '5':
                         ReverseText();
+                        break;
+                    case '6':
+                        Even();
+                        break;
+                    case '7':
+                        Fibonnaci();
+                        break;
+                    case '8':
+                        IterationEven();
                         break;
                     /*
                      * Extend the menu to include the recursive 
@@ -219,7 +231,7 @@ namespace SkalProj_Datastrukturer_Minne
                 switch (input)
                 {
                     case "+":
-                        //elements.Add(GetNumbersYield().Take(1)); Hard to print.
+                        //elements.Add(GetNumbersYield().Take(1)); Hard to print. Also not correct. Todo, how to operate generators in c#
                         elements.Add(RandomNumber(11, 100));
                         break;
                     case "-":
@@ -247,7 +259,7 @@ namespace SkalProj_Datastrukturer_Minne
                 Console.WriteLine();
                 //The result of the Linq query is not a single Int value, but an IEnumerable.
                 ////So you need to get a single value out of it, which in your case is the first value:
-                elements.ToList().ForEach(i => Console.Write("{0},", i));
+                elements.ForEach(i => Console.Write("{0},", i));
                 Console.WriteLine();
 
 
@@ -379,6 +391,106 @@ namespace SkalProj_Datastrukturer_Minne
              */
 
         }
+        static void Even()
+        {
+            int number;
+
+            Console.WriteLine("Please enter an even number like 2 or 4.");
+            string value = Console.ReadLine();
+
+            bool success = Int32.TryParse(value, out number);
+            bool isEven = number % 2 == 0;
+            if (success & isEven)
+            {
+                Console.WriteLine("Converted '{0}' to {1}.", value, number);
+
+                Console.WriteLine($"The {number}th even number is: {RecursiveEven(number)-2}");
+            }
+            else
+            {
+                Console.WriteLine("Attempted conversion of '{0}' failed.",
+                                   value ?? "<null>");
+            }
+
+        }
+
+        static void Fibonnaci()
+        {
+            int number;
+
+            Console.WriteLine("Please enter a number less than 20.");
+            string value = Console.ReadLine();
+
+            bool success = Int32.TryParse(value, out number);
+            bool isEven = number % 2 == 0;
+            bool isLessThanTwetenty = number < 20;
+            if (success & isEven & isLessThanTwetenty)
+            {
+                Console.WriteLine("Converted '{0}' to {1}.", value, number);
+
+                Console.WriteLine($"The {number}th Fibonacci number is: {GetNthFibonacci_Rec(number)}");
+            }
+            else
+            {
+                Console.WriteLine("Attempted conversion of '{0}' failed.",
+                                   value ?? "<null>");
+            }
+        }
+
+        static void IterationEven()
+        {
+            {
+                int number;
+
+                Console.WriteLine("Please enter a number like 1 or 4.");
+                string value = Console.ReadLine();
+
+                bool success = Int32.TryParse(value, out number);
+                if (success)
+                {
+                    Console.WriteLine("Converted '{0}' to {1}.", value, number);
+
+                    Console.WriteLine($"The {number}st/rd/th even number is: {IterativeEven(number-2)}");
+                }
+                else
+                {
+                    Console.WriteLine("Attempted conversion of '{0}' failed.",
+                                       value ?? "<null>");
+                }
+
+            }
+
+
+
+        }
+
+        /// <summary>
+        /// Returns even iterations of a number.
+        /// </summary>
+        public static int IterativeEven(int n)
+        {
+
+            if (n == 0)
+            {
+                return 2;
+            }
+
+            int result = 2;
+
+            for (int i = 0; i <= n; i++)
+            {
+                result += 2;
+            }
+            return result;
+
+        }
+
+
+
+
+
+
+
 
 
         public static bool CheckParentesis(String str)
@@ -414,57 +526,29 @@ namespace SkalProj_Datastrukturer_Minne
         }
 
 
-        public static bool IsBalanced(string input)
+        public static int RecursiveEven(int n)
         {
-            Dictionary<char, char> bracketPairs = new Dictionary<char, char>() {
-            { '(', ')' },
-            { '{', '}' },
-            { '[', ']' },
-            { '<', '>' }
-        };
-
-            Stack<char> brackets = new Stack<char>();
-
-            try
+            if (n==0)
             {
-                // Iterate through each character in the input string
-                foreach (char c in input)
-                {
-                    // check if the character is one of the 'opening' brackets
-                    if (bracketPairs.Keys.Contains(c))
-                    {
-                        // if yes, push to stack
-                        brackets.Push(c);
-                    }
-                    else
-                        // check if the character is one of the 'closing' brackets
-                        if (bracketPairs.Values.Contains(c))
-                    {
-                        // check if the closing bracket matches the 'latest' 'opening' bracket
-                        if (c == bracketPairs[brackets.First()])
-                        {
-                            brackets.Pop();
-                        }
-                        else
-                            // if not, its an unbalanced string
-                            return false;
-                    }
-                    else
-                        // continue looking
-                        continue;
-                }
+                return 2;
             }
-            catch
-            {
-                // an exception will be caught in case a closing bracket is found, 
-                // before any opening bracket.
-                // that implies, the string is not balanced. Return false
-                return false;
-            }
-
-            // Ensure all brackets are closed
-            return brackets.Count() == 0 ? true : false;
+            
+            return (RecursiveEven(n-1) +2);
         }
+
+        //MEMOIZATION IS A GOOD IDEA HERE.
+        public static int GetNthFibonacci_Rec(int n)
+        {
+            if ((n == 0) || (n == 1))
+            {
+                return n;
+            }
+            else
+                return (GetNthFibonacci_Rec(n - 1) + GetNthFibonacci_Rec(n - 2));
+        }
+
+
+
 
     }
 
