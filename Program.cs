@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SkalProj_Datastrukturer_Minne
 {
-    class Program
+    partial class Program
     {
         /// <summary>
         /// The main method, vill handle the menues for the program
@@ -19,6 +21,7 @@ namespace SkalProj_Datastrukturer_Minne
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParanthesis"
+                    + "\n5. Reverse text"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -44,6 +47,9 @@ namespace SkalProj_Datastrukturer_Minne
                     case '4':
                         CheckParanthesis();
                         break;
+                    case '5':
+                        ReverseText();
+                        break;
                     /*
                      * Extend the menu to include the recursive 
                      * and iterative exercises.
@@ -61,17 +67,28 @@ namespace SkalProj_Datastrukturer_Minne
         /// <summary>
         /// Examines the datastructure List
         /// </summary>
+
+        public ListCapacityDelegate ListCapacity;
+
         static void ExamineList()
         {
             List<string> parts = new(); // Egen Enumerable?
 
+            //public int Capacity { get; set; }
+            //public delegate void Writer(string message);
+            // Count is always less than the Capacity
+            int listCapacity = parts.Capacity;
+            //parts.ListCapacity = new ListCapacityDelegate();
+
+
             Console.WriteLine("ExamineList + to add item or - to remove item");
-
-
+            Console.WriteLine("ExamineList q to quit. p to print current items.");
+            Console.WriteLine($"list capacity is {parts.Capacity}");
 
             bool runLoop = true;
             do 
             {
+                
                 string input = Console.ReadLine();
                 char first = input[0];
 
@@ -80,6 +97,13 @@ namespace SkalProj_Datastrukturer_Minne
                     case '+':  // not " "
                         input = input.Remove(0, 1);
                         parts.Add(input);
+                        // DELEGATE
+                        // ListCapacity(listCapacity, value)
+                        if (parts.Capacity != listCapacity)
+                        { 
+                            Console.WriteLine($"List capacity changed from {listCapacity} to {parts.Capacity}");
+                            listCapacity = parts.Capacity;
+                        }
                         break;
                     case '-':  // not " "
                         input = input.Remove(0, 1);
@@ -87,6 +111,12 @@ namespace SkalProj_Datastrukturer_Minne
                         {
                             parts.Remove(input);
                             Console.WriteLine("item removed");
+                            // ListCapacity(listCapacity, value)
+                            if (parts.Capacity != listCapacity)
+                            {
+                                Console.WriteLine($"List capacity changed from {listCapacity} to {parts.Capacity}");
+                                listCapacity = parts.Capacity;
+                            }
                         }
                         finally
                         {
@@ -94,19 +124,21 @@ namespace SkalProj_Datastrukturer_Minne
                         }
                         break;
                     case 'q':
+                    case 'Q': // OR condition
                         runLoop = false;
                         break;
+                    case 'p':
+                        foreach (var part in parts)
+                        {
+                            Console.WriteLine(part);
+                        };
+                        break;
                     default:
+                        Console.WriteLine("Wrong input");
                         break;
                 }
 
                 //Console.WriteLine(input);
-
-                foreach (var part in parts)
-                {
-                    Console.WriteLine(part);
-                }
-                        
 
 
             } while (runLoop);
@@ -131,13 +163,100 @@ namespace SkalProj_Datastrukturer_Minne
         /// <summary>
         /// Examines the datastructure Queue
         /// </summary>
-        static void ExamineQueue()
+        /// 
+
+        // Instantiate random number generator.  
+        public static Random _random = new Random();
+
+        // Generates a random number within a range.      
+        public static int RandomNumber(int min, int max)
         {
+            return _random.Next(min, max);
+        }
+
+        private static IEnumerable<int> GetNumbersYield()
+        {
+            var i = 0;
+            while (true)
+            {
+                yield return (i++); // Returns infinite numbers and adds to i
+
+            }
+        }
+
+        //IEnumerable<int> GenerateWithYield()
+        //{
+        //    var i = 0;
+        //    while (i < 5)
+        //        yield return ++i;
+        //}
+
+        static void ExamineQueue() // Implementera metoden TestQueue. ??
+        {
+
             /*
              * Loop this method untill the user inputs something to exit to main menue.
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
+
+            bool queueLoop = true;
+            //List<T> colorOptions;
+            //colorOptions = new List<T>();
+
+            //var colorOptions = new List<string>();
+
+            //List<IEnumerable> elements = new();
+            List<int> elements = new();
+            //elements.Add(1);
+
+            do
+            {
+                Console.WriteLine("+ to Enqueue/Add to the ICA queue, - to Dequeue/remove");
+                Console.WriteLine("ExamineList q to quit");
+                string input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "+":
+                        //elements.Add(GetNumbersYield().Take(1)); Hard to print.
+                        elements.Add(RandomNumber(11, 100));
+                        break;
+                    case "-":
+                        try
+                        {
+                            elements.RemoveAt(0);
+                            break;
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            Console.WriteLine("No items to remove");
+                            break;
+                        }
+                        
+                        // EXCEPTION
+                    case "q":
+                    case "Q":
+                        queueLoop = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Wrong input");
+                        break;
+                }
+                Console.WriteLine();
+                //The result of the Linq query is not a single Int value, but an IEnumerable.
+                ////So you need to get a single value out of it, which in your case is the first value:
+                elements.ToList().ForEach(i => Console.Write("{0},", i));
+                Console.WriteLine();
+
+
+
+
+            } while (queueLoop);
+
+
+
         }
 
         /// <summary>
@@ -145,6 +264,46 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineStack()
         {
+            bool stackBool = true;
+            List<int> elements = new();
+            elements.Add(10);
+            do
+            {
+                Console.WriteLine("+ to Add to the ICA STACK, - to UNSTACK/remove last");
+                Console.WriteLine("ExamineList q to quit");
+                string input = Console.ReadLine();
+                switch(input)
+                {
+                    case "+":
+                        elements.Add(RandomNumber(11, 100));
+                        break;
+
+                    case "-":
+                        if (elements.Any()) //prevent IndexOutOfRangeException for empty list
+                        {
+                            elements.RemoveAt(elements.Count - 1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No items to remove");
+                        }
+                        break;
+                    case "Q":
+                    case "q":
+                        stackBool = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Wrong input use +, - or q");
+                        break;
+                }
+                Console.WriteLine();
+                elements.ForEach(i => Console.Write("{0},", i));
+                Console.WriteLine();
+
+
+
+            } while (stackBool);
             /*
              * Loop this method until the user inputs something to exit to main menue.
              * Create a switch with cases to push or pop items
@@ -152,8 +311,67 @@ namespace SkalProj_Datastrukturer_Minne
             */
         }
 
+
+        static void ReverseText()
+        {
+            string input;
+            bool reverseTextBool = true;
+            Stack st = new Stack();
+            Stack rev = new Stack();
+            do
+            {
+                Console.WriteLine("Enter text to reverse: ");
+                input = Console.ReadLine();
+
+                if (!(input is null))
+                {
+                    char[] array = input.ToCharArray();
+                    Array.Reverse(array);
+                    foreach (var item in array)
+                    {
+                        Console.Write(item);
+                    }
+                    Console.WriteLine();
+
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a String");
+                }
+
+
+                // _ = input ?? throw new ArgumentNullException(nameof(name));
+
+
+            } while (reverseTextBool);
+
+                //Stack_Array stk1 = newStack_Array(str.Length);
+                //foreach (charc in str)
+                //    stk1.Push(c);
+                //string revString = null;
+                //foreach (charc in str)
+                //    revString += stk1.Pop();
+
+
+
+        }
+
         static void CheckParanthesis()
         {
+            string exampelOne = "new List<int>() { 1, 2, 3, 4 }";
+            string exampelTwo = "new List<int>() { 1, 2, 3, 4 )";
+
+
+            Console.WriteLine($"{ exampelOne} is {CheckParentesis(exampelOne)}");
+            Console.WriteLine($"{ exampelTwo} is {CheckParentesis(exampelTwo)}");
+
+            List<string> list = new List<string>() { "(())", "{ }", "[({ })]", "(()])", "[)", "{[()}]" };
+
+            foreach (var item in list)
+            {
+                Console.WriteLine($"{ item} is {CheckParentesis(item)}");
+            }
+
             /*
              * Use this method to check if the paranthesis in a string is Correct or incorrect.
              * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
@@ -162,6 +380,93 @@ namespace SkalProj_Datastrukturer_Minne
 
         }
 
+
+        public static bool CheckParentesis(String str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return true;
+
+            Stack<char> stack = new Stack<char>();
+            for (int i = 0; i < str.Count(); i++)
+            {
+                char current = str[i];
+                if (current == '{' || current == '(' || current == '[') // isin {,(,[ membership
+                {
+                    stack.Push(current);
+                    continue; // start next iteration
+                }
+
+                if (current == '}' || current == ')' || current == ']')
+                {
+                    if (stack.Count == 0) // no left part
+                        return false;
+
+                    char last = stack.Peek();
+                    if (current == '}' && last == '{' || current == ')' && last == '(' || current == ']' && last == '[')
+                        stack.Pop();
+                    else
+                        return false;
+                }
+
+            }
+
+            return (stack.Count == 0);
+        }
+
+
+        public static bool IsBalanced(string input)
+        {
+            Dictionary<char, char> bracketPairs = new Dictionary<char, char>() {
+            { '(', ')' },
+            { '{', '}' },
+            { '[', ']' },
+            { '<', '>' }
+        };
+
+            Stack<char> brackets = new Stack<char>();
+
+            try
+            {
+                // Iterate through each character in the input string
+                foreach (char c in input)
+                {
+                    // check if the character is one of the 'opening' brackets
+                    if (bracketPairs.Keys.Contains(c))
+                    {
+                        // if yes, push to stack
+                        brackets.Push(c);
+                    }
+                    else
+                        // check if the character is one of the 'closing' brackets
+                        if (bracketPairs.Values.Contains(c))
+                    {
+                        // check if the closing bracket matches the 'latest' 'opening' bracket
+                        if (c == bracketPairs[brackets.First()])
+                        {
+                            brackets.Pop();
+                        }
+                        else
+                            // if not, its an unbalanced string
+                            return false;
+                    }
+                    else
+                        // continue looking
+                        continue;
+                }
+            }
+            catch
+            {
+                // an exception will be caught in case a closing bracket is found, 
+                // before any opening bracket.
+                // that implies, the string is not balanced. Return false
+                return false;
+            }
+
+            // Ensure all brackets are closed
+            return brackets.Count() == 0 ? true : false;
+        }
+
     }
+
 }
 
