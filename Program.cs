@@ -222,6 +222,8 @@ namespace SkalProj_Datastrukturer_Minne
             List<int> elements = new();
             //elements.Add(1);
 
+            var numberGenerator = GetNumbersYield(); // Vill gärna att denna fungerar.
+            int i = 1;
             do
             {
                 Console.WriteLine("+ to Enqueue/Add to the ICA queue, - to Dequeue/remove");
@@ -231,8 +233,9 @@ namespace SkalProj_Datastrukturer_Minne
                 switch (input)
                 {
                     case "+":
-                        //elements.Add(GetNumbersYield().Take(1)); Hard to print. Also not correct. Todo, how to operate generators in c#
-                        elements.Add(RandomNumber(11, 100));
+                        elements.Add(i); // Hard to print. Also not correct. Todo, how to operate generators in c#
+                        //elements.Add(RandomNumber(11, 100));
+                        i++;
                         break;
                     case "-":
                         try
